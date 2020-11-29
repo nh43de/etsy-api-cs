@@ -1,5 +1,8 @@
+using System;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Linq;
+using FluentAssertions;
 using Xunit;
 
 namespace EtsyApi.Tests
@@ -12,16 +15,16 @@ namespace EtsyApi.Tests
         //TODO: unit tests
 
         //[Theory, Conventions]
-        //public void Login(EtsyService.EtsyService etsyService)
+        //public void Login(EtsyService etsyService)
         //{
         //    var r = etsyService.Login();
 
-            
+
         //}
 
 
         //[Theory, Conventions]
-        //public void GetOauthTokens(EtsyService.EtsyService etsyService)
+        //public void GetOauthTokens(EtsyService etsyService)
         //{
         //    var r = etsyService.GetOauthTokens();
 
@@ -29,21 +32,29 @@ namespace EtsyApi.Tests
         //}
 
         //[Theory, Conventions]
-        //public async Task Search(EtsyService.EtsyService etsyService)
+        //public async Task Search(EtsyService etsyService)
         //{
-        //    var r = await etsyService.Search("monstera deliciosa", 100, 0, 1);
+        //    var r = await etsyService.GetListingsPage("knitted scarf", 100, 0, 1);
 
 
         //}
 
 
         //[Theory, Conventions]
-        //public async Task Test123(EtsyService.EtsyService etsyService)
+        //public async Task Search(EtsyService etsyService)
         //{
-        //    var r = await etsyService.Get123(CancellationToken.None);
+        //    var progressStr = "";
 
-        //    r.IsSuccess.Should().BeTrue();
-        //    r.Data.Should().NotBeEmpty();
+        //    var progressReporter = new Progress<string>((s) => progressStr = s);
+
+        //    var r = etsyService.GetAllListings("knitted scarf", CancellationToken.None, progressReporter);
+
+        //    var rr = await r.Take(400).ToArrayAsync();
+
+        //    rr.Length.Should().Be(400);
+        //    progressStr.Should().Be("Got page 4");
         //}
+
+
     }
 }

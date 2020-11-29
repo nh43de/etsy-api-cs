@@ -3,6 +3,9 @@ using System.IO;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
+using System.Collections.Generic;
+using System.Runtime.CompilerServices;
+using System.Threading;
 using System.Web;
 using EtsyApi.Middleware;
 using EtsyApi.Models;
@@ -29,17 +32,59 @@ namespace EtsyApi
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="keywords"></param>
+        /// <param name="keyword"></param>
         /// <param name="limit">Max is 100</param>
         /// <param name="offset"></param>
         /// <param name="page">Starts at 1</param>
         /// <returns></returns>
-        public async Task<ListingSearchResult> Search(string keywords,int? limit = 25,int? offset = 0,int? page = 1)
+        public async Task<ListingSearchResult> GetListingsPage(string keyword,int? limit = 25,int? offset = 0,int? page = 1)
         {
             return await _etsyApi
-                .findAllListingActive(keywords,limit,offset,page)
+                .findAllListingActive(keyword,limit,offset,page)
                 .ConfigureAwait(false);
         }
+
+
+        /// <summary>
+        /// Gets all listings and automatically paginates through them.
+        /// </summary>
+        /// <param name="keyword"></param>
+        /// <param name="token"></param>
+        /// <param name="progressReporter"></param>
+        /// <returns></returns>
+        public async IAsyncEnumerable<Listing> GetAllListings(string keyword, [EnumeratorCancellation] CancellationToken token = default(CancellationToken), IProgress<string> progressReporter = null)
+        {
+            var page = 1;
+            var hasMorePages = true;
+
+            // Stop with 10 pages, because these are large repos:
+            while (hasMorePages)
+            {
+                if (token.IsCancellationRequested)
+                    break;
+
+                progressReporter?.Report("Getting page " + page);
+
+                var r = await GetListingsPage(keyword, 100, 0, page);
+
+                progressReporter?.Report("Got page " + page);
+
+                hasMorePages = r.pagination.next_page.HasValue;
+
+                if(token.IsCancellationRequested)
+                    break;
+                
+                foreach (var rResult in r.results)
+                {
+                    yield return rResult;
+                }
+
+                page++;
+            }
+        }
+
+
+
 
         //public async Task OpenOrders()
         //{
