@@ -1,0 +1,11 @@
+﻿{
+  "EtsyApiAuth": {
+    "ConsumerKey": "copy this file, rename to .user.json, and fill in template. do not commit to src control.",
+    "ConsumerSecret": "",
+    "VerifierSecret": "",
+    "TokenSecret": "",
+    "Token": "",
+    "OAuthTokenSecret": "",
+    "OAuthToken": ""
+  }
+}
