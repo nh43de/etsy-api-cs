@@ -4,8 +4,6 @@
     <TargetFramework>netstandard2.0</TargetFramework>
     <LangVersion>latest</LangVersion>
     <UserSecretsId>9256d2e3-801b-4bf0-aeff-835da573bc77</UserSecretsId>
-
-    <TargetFrameworks>netstandard2.0;</TargetFrameworks>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <PackageId>EtsyApi</PackageId>
     <AssemblyName>EtsyApi</AssemblyName>
