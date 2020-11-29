@@ -2,6 +2,7 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Linq;
+using DataPowerTools.Extensions;
 using FluentAssertions;
 using Xunit;
 
@@ -16,27 +17,29 @@ namespace EtsyApi.Tests
 
 
 
-        [Theory, Conventions]
-        public void Login(EtsyService etsyService)
-        {
-            var r = etsyService.Login();
+        //[Theory, Conventions]
+        //public void Login(EtsyService etsyService)
+        //{
+        //    var r = etsyService.Login();
 
 
-        }
+        //}
 
 
-        [Theory, Conventions]
-        public void GetOauthTokens(EtsyService etsyService)
-        {
-            var r = etsyService.GetOauthTokens();
+        //[Theory, Conventions]
+        //public void GetOauthTokens(EtsyService etsyService)
+        //{
+        //    var r = etsyService.GetOauthTokens();
 
 
-        }
+        //}
 
         //[Theory, Conventions]
         //public async Task FindTaxonomy(EtsyService etsyService)
         //{
-        //    var r = await etsyService.FindTaxonomyByName("test");
+        //    var r = await etsyService.FindTaxonomyByPath("test");
+
+        //    r.WriteCsv(@"c:\code\source\test.csv");
 
         //}
 
@@ -64,7 +67,7 @@ namespace EtsyApi.Tests
 
         //    var progressReporter = new Progress<string>((s) => progressStr = s);
 
-        //    var r = etsyService.GetAllListings("knitted scarf", 1105, CancellationToken.None, progressReporter);
+        //    var r = etsyService.GetAllListings("knitted scarf", 1544, CancellationToken.None, progressReporter);
 
         //    var rr = await r.Take(400).ToArrayAsync();
 

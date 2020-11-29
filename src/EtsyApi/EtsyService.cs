@@ -211,7 +211,22 @@ namespace EtsyApi
         {
             var d = await GetBuyerTaxonomies();
 
-            return d.results.Where(p => p.path.Contains(pathContains)).ToArray();
+            var all = DescendantsAndSelf(d.results);
+
+            return all.Where(p => p.path.Contains(pathContains)).ToArray();
+        }
+
+        public IEnumerable<Taxonomy> DescendantsAndSelf(IEnumerable<Taxonomy> taxa)
+        {
+            foreach (var taxonomy in taxa)
+            {
+                yield return taxonomy;
+
+                foreach (var item in DescendantsAndSelf(taxonomy.children))
+                {
+                    yield return item;
+                }
+            }
         }
     }
 
