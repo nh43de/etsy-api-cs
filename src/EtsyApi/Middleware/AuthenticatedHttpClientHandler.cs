@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.WebUtilities;
 using OAuth;
 
-namespace EtsyApi
+namespace EtsyApi.Middleware
 {
     public class AuthenticatedHttpClientHandler : HttpClientHandler
     {

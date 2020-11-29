@@ -8,4 +8,5 @@
         public int? effective_page { get; set; }
         public int? next_page { get; set; }
     }
+
 }

@@ -1,4 +1,6 @@
-﻿namespace EtsyApi.Models
+﻿using EtsyApi.Models;
+
+namespace EtsyApi.Responses
 {
     public class ListingSearchResult
     {

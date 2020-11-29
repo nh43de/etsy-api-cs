@@ -4,11 +4,13 @@ using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using System.Collections.Generic;
+using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Web;
 using EtsyApi.Middleware;
 using EtsyApi.Models;
+using EtsyApi.Responses;
 using OAuth;
 using Refit;
 
@@ -33,14 +35,15 @@ namespace EtsyApi
         /// 
         /// </summary>
         /// <param name="keyword"></param>
+        /// <param name="taxonomyId"></param>
         /// <param name="limit">Max is 100</param>
         /// <param name="offset"></param>
         /// <param name="page">Starts at 1</param>
         /// <returns></returns>
-        public async Task<ListingSearchResult> GetListingsPage(string keyword,int? limit = 25,int? offset = 0,int? page = 1)
+        public async Task<ListingSearchResult> GetListingsPage(string keyword, int? taxonomyId = null, int? limit = 25,int? offset = 0,int? page = 1)
         {
             return await _etsyApi
-                .findAllListingActive(keyword,limit,offset,page)
+                .findAllListingActive(keyword, taxonomyId, limit,offset,page)
                 .ConfigureAwait(false);
         }
 
@@ -49,14 +52,15 @@ namespace EtsyApi
         /// Gets all listings and automatically paginates through them.
         /// </summary>
         /// <param name="keyword"></param>
+        /// <param name="taxonomyId"></param>
         /// <param name="token"></param>
         /// <param name="progressReporter"></param>
         /// <returns></returns>
-        public async IAsyncEnumerable<Listing> GetAllListings(string keyword, [EnumeratorCancellation] CancellationToken token = default(CancellationToken), IProgress<string> progressReporter = null)
+        public async IAsyncEnumerable<Listing> GetAllListings(string keyword, int? taxonomyId,  [EnumeratorCancellation] CancellationToken token = default(CancellationToken), IProgress<string> progressReporter = null)
         {
             var page = 1;
             var hasMorePages = true;
-
+            
             // Stop with 10 pages, because these are large repos:
             while (hasMorePages)
             {
@@ -65,7 +69,7 @@ namespace EtsyApi
 
                 progressReporter?.Report("Getting page " + page);
 
-                var r = await GetListingsPage(keyword, 100, 0, page);
+                var r = await GetListingsPage(keyword, taxonomyId, 100, 0, page);
 
                 progressReporter?.Report("Got page " + page);
 
@@ -179,6 +183,35 @@ namespace EtsyApi
             var OAuthTokenSecret = HttpUtility.ParseQueryString(responseFromServer).Get("oauth_token_secret");
 
             return (OAuthToken, OAuthTokenSecret);
+        }
+
+        public async Task<TaxonomyResponse> GetBuyerTaxonomies()
+        {
+            return await _etsyApi.getBuyerTaxonomy();
+        }
+
+        /// <summary>
+        /// E.g. "Outdoor & Gardening"
+        /// </summary>
+        /// <param name="descriptionContains"></param>
+        /// <returns></returns>
+        public async Task<Taxonomy[]> FindTaxonomyByName(string descriptionContains)
+        {
+            var d = await GetBuyerTaxonomies();
+
+            return d.results.Where(p => p.name.Contains(descriptionContains)).ToArray();
+        }
+
+        /// <summary>
+        /// E.g. "outdoor-and-garden"
+        /// </summary>
+        /// <param name="pathContains"></param>
+        /// <returns></returns>
+        public async Task<Taxonomy[]> FindTaxonomyByPath(string pathContains)
+        {
+            var d = await GetBuyerTaxonomies();
+
+            return d.results.Where(p => p.path.Contains(pathContains)).ToArray();
         }
     }
 

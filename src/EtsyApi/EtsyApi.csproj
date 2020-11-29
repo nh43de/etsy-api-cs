@@ -38,9 +38,4 @@
     </PackageReference>
   </ItemGroup>
 
-
-  <ItemGroup>
-    <Folder Include="Responses\" />
-  </ItemGroup>
-
 </Project>
