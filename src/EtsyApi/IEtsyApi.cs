@@ -1,9 +1,8 @@
-﻿using System.Collections.Generic;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using EtsyApi.Models;
 using Refit;
 
-namespace EtsyApi.EtsyService
+namespace EtsyApi
 {
     public interface IEtsyApi
     {

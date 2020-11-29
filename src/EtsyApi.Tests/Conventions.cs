@@ -37,7 +37,7 @@ namespace EtsyApi.Tests
 
             var auth = appSettings.GetSection("EtsyApiAuth").Get<EtsyApiAuth>();
 
-            fixture.Inject(new EtsyService.EtsyService(auth));
+            fixture.Inject(new EtsyService(auth));
 
             return fixture;
         }
