@@ -32,7 +32,7 @@ namespace EtsyApi.Tests
         //}
 
         //[Theory, Conventions]
-        //public async Task Search(EtsyService etsyService)
+        //public async Task SearchSinglePage(EtsyService etsyService)
         //{
         //    var r = await etsyService.GetListingsPage("knitted scarf", 100, 0, 1);
 
