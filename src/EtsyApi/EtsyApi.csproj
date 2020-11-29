@@ -4,6 +4,27 @@
     <TargetFramework>netstandard2.0</TargetFramework>
     <LangVersion>latest</LangVersion>
     <UserSecretsId>9256d2e3-801b-4bf0-aeff-835da573bc77</UserSecretsId>
+
+    <TargetFrameworks>netstandard2.0;</TargetFrameworks>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <PackageId>EtsyApi</PackageId>
+    <AssemblyName>EtsyApi</AssemblyName>
+    <Authors>Nathan Hollis</Authors>
+    <Description>Etsy API implementation made using Refit.</Description>
+    <PackageProjectUrl>https://github.com/nh43de/etsy-api-cs</PackageProjectUrl>
+    <PackageTags>tools;helpers</PackageTags>
+    <PackageIconUrl></PackageIconUrl>
+    <PackageReleaseNotes></PackageReleaseNotes>
+    <Copyright>Copyright 2020</Copyright>
+    <RepositoryType>git</RepositoryType>
+    <RepositoryUrl>https://github.com/nh43de/etsy-api-cs</RepositoryUrl>
+    <SignAssembly>true</SignAssembly>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <MinVerTagPrefix>v</MinVerTagPrefix>
+    <IncludeSymbols>true</IncludeSymbols>
+    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <ContinuousIntegrationBuild Condition="'$(GITHUB_ACTIONS)' == 'true'">true</ContinuousIntegrationBuild>
   </PropertyGroup>
 
 
