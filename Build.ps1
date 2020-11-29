@@ -26,9 +26,9 @@ $artifacts = ".\artifacts"
 
 if(Test-Path $artifacts) { Remove-Item $artifacts -Force -Recurse }
 
-exec { & dotnet clean -c Release }
+exec { & dotnet clean .\src\EtsyApi\EtsyApi.csproj -c Release }
 
-exec { & dotnet build -c Release }
+exec { & dotnet build .\src\EtsyApi\EtsyApi.csproj -c Release }
 
 
 <#
