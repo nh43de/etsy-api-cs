@@ -11,6 +11,7 @@
         draft,
         create,
         @private,
-        unavailable
+        unavailable,
+        vacation
     }
 }

@@ -64,7 +64,7 @@ namespace EtsyApi.Tests
 
         //    var progressReporter = new Progress<string>((s) => progressStr = s);
 
-        //    var r = etsyService.GetAllListings("monstera", 1105, CancellationToken.None, progressReporter);
+        //    var r = etsyService.GetAllListings("knitted scarf", 1105, CancellationToken.None, progressReporter);
 
         //    var rr = await r.Take(400).ToArrayAsync();
 
