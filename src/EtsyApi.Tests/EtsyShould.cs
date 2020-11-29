@@ -31,29 +31,29 @@ namespace EtsyApi.Tests
 
         //}
 
-        //[Theory, Conventions]
-        //public async Task SearchSinglePage(EtsyService etsyService)
-        //{
-        //    var r = await etsyService.GetListingsPage("knitted scarf", 100, 0, 1);
+        [Theory, Conventions]
+        public async Task SearchSinglePage(EtsyService etsyService)
+        {
+            var r = await etsyService.GetListingsPage("knitted scarf", 100, 0, 1);
 
 
-        //}
+        }
 
 
-        //[Theory, Conventions]
-        //public async Task Search(EtsyService etsyService)
-        //{
-        //    var progressStr = "";
+        [Theory, Conventions]
+        public async Task Search(EtsyService etsyService)
+        {
+            var progressStr = "";
 
-        //    var progressReporter = new Progress<string>((s) => progressStr = s);
+            var progressReporter = new Progress<string>((s) => progressStr = s);
 
-        //    var r = etsyService.GetAllListings("knitted scarf", CancellationToken.None, progressReporter);
+            var r = etsyService.GetAllListings("knitted scarf", CancellationToken.None, progressReporter);
 
-        //    var rr = await r.Take(400).ToArrayAsync();
+            var rr = await r.Take(400).ToArrayAsync();
 
-        //    rr.Length.Should().Be(400);
-        //    progressStr.Should().Be("Got page 4");
-        //}
+            rr.Length.Should().Be(400);
+            progressStr.Should().Be("Got page 4");
+        }
 
 
     }

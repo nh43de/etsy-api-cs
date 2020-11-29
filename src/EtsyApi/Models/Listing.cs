@@ -17,9 +17,9 @@ namespace EtsyApi.Models
         [JsonConverter(typeof(UnixDateTimeConverter))]
         public DateTime? ending_tsz { get; set; }
 
-        public bool has_variations { get; set; }
-        public bool is_private { get; set; }
-        public bool is_supply { get; set; }
+        public bool? has_variations { get; set; }
+        public bool? is_private { get; set; }
+        public bool? is_supply { get; set; }
 
 
         [JsonConverter(typeof(UnixDateTimeConverter))]

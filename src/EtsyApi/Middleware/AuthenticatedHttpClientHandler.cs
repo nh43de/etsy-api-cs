@@ -61,7 +61,7 @@ namespace EtsyApi
 
                     request.Headers.Add("Authorization", authHeaders);
 
-                    request.Headers.Add("api_key", _auth.ConsumerKey);
+                    //request.Headers.Add("api_key", _auth.ConsumerKey);
                 }
             }
 
