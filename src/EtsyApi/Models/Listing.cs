@@ -31,7 +31,7 @@ namespace EtsyApi.Models
         [JsonConverter(typeof(UnixDateTimeConverter))]
         public DateTime? original_creation_tsz { get; set; }
 
-        public string price { get; set; }
+        public float? price { get; set; }
         public int? quantity { get; set; }
         public long? shipping_template_id { get; set; }
         public int? shop_section_id { get; set; }
