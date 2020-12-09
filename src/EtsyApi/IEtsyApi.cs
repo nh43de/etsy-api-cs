@@ -16,6 +16,16 @@ namespace EtsyApi
             [AliasAs("page")] int? page = 0
         );
 
+        [Get("/shops/{shop_id}/listings/active")]
+        Task<ListingSearchResult> findAllShopListingsActive(
+            [AliasAs("shop_id")] string shopId,
+            [AliasAs("keywords")] string keywords = null,
+            [AliasAs("taxonomy_id")] int? taxonomyId = null,
+            [AliasAs("limit")] int? limit = 25,
+            [AliasAs("offset")] int? offset = 0,
+            [AliasAs("page")] int? page = 0
+        );
+
         [Get("/taxonomy/buyer/get")]
         Task<TaxonomyResponse> getBuyerTaxonomy();
     }

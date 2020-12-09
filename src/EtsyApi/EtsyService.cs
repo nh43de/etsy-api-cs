@@ -49,18 +49,31 @@ namespace EtsyApi
 
 
         /// <summary>
-        /// Gets all listings and automatically paginates through them.
+        /// 
         /// </summary>
+        /// <param name="shopId"></param>
         /// <param name="keyword"></param>
         /// <param name="taxonomyId"></param>
-        /// <param name="token"></param>
-        /// <param name="progressReporter"></param>
+        /// <param name="limit">Max is 100</param>
+        /// <param name="offset"></param>
+        /// <param name="page">Starts at 1</param>
         /// <returns></returns>
-        public async IAsyncEnumerable<Listing> GetAllListings(string keyword, int? taxonomyId,  [EnumeratorCancellation] CancellationToken token = default(CancellationToken), IProgress<string> progressReporter = null)
+        public async Task<ListingSearchResult> GetShopListingsPage(string shopId, string keyword = null, int? taxonomyId = null, int? limit = 25, int? offset = 0, int? page = 1)
+        {
+            return await _etsyApi
+                .findAllShopListingsActive(shopId, keyword, taxonomyId, limit, offset, page)
+                .ConfigureAwait(false);
+        }
+
+
+
+
+
+        private async IAsyncEnumerable<Listing> GetAllInternal(Func<int, Task<ListingSearchResult>> searchFunc, [EnumeratorCancellation] CancellationToken token = default(CancellationToken), IProgress<string> progressReporter = null)
         {
             var page = 1;
             var hasMorePages = true;
-            
+
             // Stop with 10 pages, because these are large repos:
             while (hasMorePages)
             {
@@ -69,15 +82,15 @@ namespace EtsyApi
 
                 progressReporter?.Report("Getting page " + page);
 
-                var r = await GetListingsPage(keyword, taxonomyId, 100, 0, page);
+                var r = await searchFunc(page);
 
                 progressReporter?.Report("Got page " + page);
 
                 hasMorePages = r.pagination.next_page.HasValue;
 
-                if(token.IsCancellationRequested)
+                if (token.IsCancellationRequested)
                     break;
-                
+
                 foreach (var rResult in r.results)
                 {
                     yield return rResult;
@@ -85,6 +98,48 @@ namespace EtsyApi
 
                 page++;
             }
+        }
+
+
+        /// <summary>
+        /// Gets all listings and automatically paginates through them.
+        /// </summary>
+        /// <param name="keyword"></param>
+        /// <param name="taxonomyId"></param>
+        /// <param name="token"></param>
+        /// <param name="progressReporter"></param>
+        /// <returns></returns>
+        public IAsyncEnumerable<Listing> GetAllShopListings(string shopId, string keyword = null, int? taxonomyId = null, CancellationToken token = default(CancellationToken), IProgress<string> progressReporter = null)
+        {
+            var rr = GetAllInternal(async (page) =>
+            {
+                var r = await GetShopListingsPage(shopId, keyword, taxonomyId, 100, 0, page);
+
+                return r;
+            }, token, progressReporter);
+
+            return rr;
+        }
+
+
+        /// <summary>
+        /// Gets all listings and automatically paginates through them.
+        /// </summary>
+        /// <param name="keyword"></param>
+        /// <param name="taxonomyId"></param>
+        /// <param name="token"></param>
+        /// <param name="progressReporter"></param>
+        /// <returns></returns>
+        public IAsyncEnumerable<Listing> GetAllListings(string keyword, int? taxonomyId = null, CancellationToken token = default(CancellationToken), IProgress<string> progressReporter = null)
+        {
+            var rr = GetAllInternal(async (page) =>
+            {
+                var r = await GetListingsPage(keyword, taxonomyId, 100, 0, page);
+
+                return r;
+            }, token, progressReporter);
+
+            return rr;
         }
 
 

@@ -34,14 +34,14 @@ namespace EtsyApi.Tests
 
         //}
 
-        //[Theory, Conventions]
-        //public async Task FindTaxonomy(EtsyService etsyService)
-        //{
-        //    var r = await etsyService.FindTaxonomyByPath("test");
+        [Theory, Conventions]
+        public async Task FindTaxonomy(EtsyService etsyService)
+        {
+            var r = await etsyService.FindTaxonomyByPath("test");
 
-        //    r.WriteCsv(@"c:\code\source\test.csv");
+            r.WriteCsv(@"c:\code\source\test.csv");
 
-        //}
+        }
 
         //[Theory, Conventions]
         //public async Task GetTaxonomy(EtsyService etsyService)
@@ -51,14 +51,24 @@ namespace EtsyApi.Tests
 
         //}
 
-        //[Theory, Conventions]
-        //public async Task SearchSinglePage(EtsyService etsyService)
-        //{
-        //    var r = await etsyService.GetListingsPage("knitted scarf", null, 100, 0, 1);
+        [Theory, Conventions]
+        public async Task SearchSinglePage(EtsyService etsyService)
+        {
+            var r = await etsyService.GetListingsPage("knitted scarf", null, 100, 0, 1);
 
 
-        //}
+        }
 
+
+        [Theory, Conventions]
+        public async Task SearchSinglePageShop(EtsyService etsyService)
+        {
+            var r = await etsyService.GetAllShopListings("myshop").ToArrayAsync();
+
+
+
+
+        }
 
         //[Theory, Conventions]
         //public async Task Search(EtsyService etsyService)
