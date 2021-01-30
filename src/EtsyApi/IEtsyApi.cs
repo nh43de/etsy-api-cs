@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using EtsyApi.Models;
 using EtsyApi.Responses;
 using Refit;
@@ -24,6 +25,11 @@ namespace EtsyApi
             [AliasAs("limit")] int? limit = 25,
             [AliasAs("offset")] int? offset = 0,
             [AliasAs("page")] int? page = 0
+        );
+
+        [Get("/listings/{listing_id}")]
+        Task<ListingSearchResult> getListing(
+           [AliasAs("listing_id")] string listingIds
         );
 
         [Get("/taxonomy/buyer/get")]

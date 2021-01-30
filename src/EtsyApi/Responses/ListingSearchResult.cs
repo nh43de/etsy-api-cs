@@ -9,6 +9,5 @@ namespace EtsyApi.Responses
         public Listing[] results { get; set; }
 
         public PaginationDetails pagination { get; set; }
-
     }
 }

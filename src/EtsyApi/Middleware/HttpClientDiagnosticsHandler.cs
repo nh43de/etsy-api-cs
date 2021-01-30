@@ -6,7 +6,7 @@ using Serilog;
 
 namespace EtsyApi.Middleware
 {
-    [DebuggerStepThrough]
+    //[DebuggerStepThrough]
     public class HttpClientDiagnosticsHandler : DelegatingHandler
     {
         public HttpClientDiagnosticsHandler(HttpMessageHandler innerHandler) : base(innerHandler)

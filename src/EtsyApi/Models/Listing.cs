@@ -49,5 +49,10 @@ namespace EtsyApi.Models
         public string url { get; set; }
         public int? user_id { get; set; }
         public int? views { get; set; }
+
+        public override string ToString()
+        {
+            return title;
+        }
     }
 }

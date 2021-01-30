@@ -64,11 +64,28 @@ namespace EtsyApi
                 .findAllShopListingsActive(shopId, keyword, taxonomyId, limit, offset, page)
                 .ConfigureAwait(false);
         }
+        
+        /// <summary>
+        /// Gets listings by ID for the page.
+        /// </summary>
+        /// <param name="listingId"></param>
+        /// <returns></returns>
+        public async Task<ListingSearchResult> GetListingsByIdPage(int[] listingId)
+        {
+            var listingIdStr = string.Join(",", listingId);
 
-
-
-
-
+            return await _etsyApi
+                .getListing(listingIdStr)
+                .ConfigureAwait(false);
+        }
+        
+        /// <summary>
+        /// Async enumerable for enumerating through paginated response.
+        /// </summary>
+        /// <param name="searchFunc"></param>
+        /// <param name="token"></param>
+        /// <param name="progressReporter"></param>
+        /// <returns></returns>
         private async IAsyncEnumerable<Listing> GetAllInternal(Func<int, Task<ListingSearchResult>> searchFunc, [EnumeratorCancellation] CancellationToken token = default(CancellationToken), IProgress<string> progressReporter = null)
         {
             var page = 1;
@@ -100,10 +117,10 @@ namespace EtsyApi
             }
         }
 
-
         /// <summary>
         /// Gets all listings and automatically paginates through them.
         /// </summary>
+        /// <param name="shopId"></param>
         /// <param name="keyword"></param>
         /// <param name="taxonomyId"></param>
         /// <param name="token"></param>
@@ -120,7 +137,6 @@ namespace EtsyApi
 
             return rr;
         }
-
 
         /// <summary>
         /// Gets all listings and automatically paginates through them.
@@ -142,8 +158,36 @@ namespace EtsyApi
             return rr;
         }
 
+        /// <summary>
+        /// Gets all listings by Id
+        /// </summary>
+        /// <param name="listingId"></param>
+        /// <param name="token"></param>
+        /// <param name="progressReporter"></param>
+        /// <returns></returns>
+        public IAsyncEnumerable<Listing> GetListingsById(
+            int listingId, 
+            CancellationToken token = default(CancellationToken), 
+            IProgress<string> progressReporter = null) => GetListingsById(new[] {listingId}, token, progressReporter);
+        
+        /// <summary>
+        /// Gets all listings by Id
+        /// </summary>
+        /// <param name="listingId"></param>
+        /// <param name="token"></param>
+        /// <param name="progressReporter"></param>
+        /// <returns></returns>
+        public IAsyncEnumerable<Listing> GetListingsById(int[] listingId, CancellationToken token = default(CancellationToken), IProgress<string> progressReporter = null)
+        {
+            var rr = GetAllInternal(async (page) =>
+            {
+                var r = await GetListingsByIdPage(listingId);
 
+                return r;
+            }, token, progressReporter);
 
+            return rr;
+        }
 
         //public async Task OpenOrders()
         //{
@@ -205,6 +249,10 @@ namespace EtsyApi
 
         private const string RequestAccessTokenUrl = "https://openapi.etsy.com/v2/oauth/access_token";
 
+        /// <summary>
+        /// Gets tokens for login.
+        /// </summary>
+        /// <returns></returns>
         public (string OAuthToken, string OAuthTokenSecret) GetOauthTokens()
         {
             if (string.IsNullOrEmpty(_auth.TokenSecret) || string.IsNullOrEmpty(_auth.VerifierSecret))
@@ -269,6 +317,34 @@ namespace EtsyApi
             var all = DescendantsAndSelf(d.results);
 
             return all.Where(p => p.path.Contains(pathContains)).ToArray();
+        }
+
+        /// <summary>
+        /// E.g. "outdoor-and-garden"
+        /// </summary>
+        /// <param name="pathContains"></param>
+        /// <returns></returns>
+        public async Task<Taxonomy[]> GetBuyerTaxonomiesFlattened()
+        {
+            var d = await GetBuyerTaxonomies();
+
+            var all = DescendantsAndSelf(d.results);
+
+            return all.ToArray();
+        }
+        
+        /// <summary>
+        /// E.g. "outdoor-and-garden"
+        /// </summary>
+        /// <param name="taxonomyId"></param>
+        /// <returns></returns>
+        public async Task<Taxonomy[]> FindTaxonomyById(int taxonomyId)
+        {
+            var d = await GetBuyerTaxonomies();
+
+            var all = DescendantsAndSelf(d.results);
+
+            return all.Where(p => p.id == taxonomyId).ToArray();
         }
 
         public IEnumerable<Taxonomy> DescendantsAndSelf(IEnumerable<Taxonomy> taxa)
