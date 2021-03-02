@@ -59,6 +59,13 @@ namespace EtsyApi.Tests
         //    var r = await etsyService.GetBuyerTaxonomies();
         //}
 
+        
+        [Theory, Conventions]
+        public async Task GetShops(EtsyService etsyService)
+        {
+            var r = await etsyService.GetShops(new [] {"CMoreDesignsYourway"});
+        }
+
         [Theory, Conventions]
         public async Task SearchSinglePage(EtsyService etsyService)
         {

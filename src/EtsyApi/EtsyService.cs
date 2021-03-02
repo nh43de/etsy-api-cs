@@ -79,6 +79,17 @@ namespace EtsyApi
                 .ConfigureAwait(false);
         }
         
+        public async Task<Shop[]> GetShops(string[] shopIds)
+        {
+            var listingIdStr = string.Join(",", shopIds);
+
+            var r = await _etsyApi
+                .getShops(listingIdStr)
+                .ConfigureAwait(false);
+
+            return r.results;
+        }
+        
         /// <summary>
         /// Async enumerable for enumerating through paginated response.
         /// </summary>

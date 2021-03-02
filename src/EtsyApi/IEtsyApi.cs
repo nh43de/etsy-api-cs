@@ -6,6 +6,9 @@ using Refit;
 
 namespace EtsyApi
 {
+    /// <summary>
+    /// 
+    /// </summary>
     public interface IEtsyApi
     {
         [Get("/listings/active")]
@@ -27,6 +30,11 @@ namespace EtsyApi
             [AliasAs("page")] int? page = 0
         );
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="listingIds">Comma separated listing ids</param>
+        /// <returns></returns>
         [Get("/listings/{listing_id}")]
         Task<ListingSearchResult> getListing(
            [AliasAs("listing_id")] string listingIds
@@ -34,5 +42,13 @@ namespace EtsyApi
 
         [Get("/taxonomy/buyer/get")]
         Task<TaxonomyResponse> getBuyerTaxonomy();
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="shopIds">Comma separated shop ids</param>
+        /// <returns></returns>
+        [Get("/shops/{shop_id}")]
+        Task<ShopsResponse> getShops([AliasAs("shop_id")] string shopIds);
     }
 }
