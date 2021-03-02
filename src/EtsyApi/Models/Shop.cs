@@ -233,6 +233,11 @@
         public bool? use_new_inventory_endpoints { get; set; }
 
         /// <summary>
+        /// Is this shop US based?
+        /// </summary>
+        public bool? is_shop_us_based { get; set; }
+        
+        /// <summary>
         /// True if shop policies include a link to EU online dispute form 
         /// </summary>
         public bool include_dispute_form_link { get; set; }
