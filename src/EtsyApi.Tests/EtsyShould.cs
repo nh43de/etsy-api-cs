@@ -14,7 +14,7 @@ namespace EtsyApi.Tests
     {
         private readonly string _searchExample = "knitted scarf";
         private readonly string _shopExample = "myshop";
-        private readonly int _listingExample = 123123123;
+        private readonly int _listingExample = 184814873;
         private readonly int _taxonomyIdExample = 123123123;
         
         //[Theory, Conventions]
@@ -34,7 +34,20 @@ namespace EtsyApi.Tests
         {
             var r = await etsyService.GetListingsById(new[] { _listingExample }).ToArrayAsync();
         }
-        
+
+
+        [Theory, Conventions]
+        public async Task GetListingWithIncludes(EtsyService etsyService)
+        {
+            var r = await etsyService.GetListingsById(new[] { _listingExample }, CancellationToken.None, ListingAssociationIncludes.ShippingInfo | ListingAssociationIncludes.Shop | ListingAssociationIncludes.Images).ToArrayAsync();
+        }
+
+        [Theory, Conventions]
+        public async Task GetListingWithIncludesString(EtsyService etsyService)
+        {
+            var r = await etsyService.GetListingsByIdStringIncludes(new[] { _listingExample }, CancellationToken.None, "Images(url_75x75,url_170x135),Shop(shop_id)").ToArrayAsync();
+        }
+
         [Theory, Conventions]
         public async Task GetAllTaxonomies(EtsyService etsyService)
         {

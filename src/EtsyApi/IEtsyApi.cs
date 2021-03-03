@@ -6,6 +6,15 @@ using Refit;
 
 namespace EtsyApi
 {
+    /*
+(.*?)\t(.*?)\t(.*?)\t(.*?)\t(.*?)\r\n
+boolean
+
+\ \ \ \ ///\ <summary>\r\n\ \ \ \ ///\ $5\r\n\ \ \ \ ///\ </summary>\r\n\ \ \ \ public $4 $1 { get; set; }\r\n\r\n
+bool
+
+     */
+
     /// <summary>
     /// 
     /// </summary>
@@ -37,16 +46,17 @@ namespace EtsyApi
         /// <returns></returns>
         [Get("/listings/{listing_id}")]
         Task<ListingSearchResult> getListing(
-           [AliasAs("listing_id")] string listingIds
+           [AliasAs("listing_id")] string listingIds, [AliasAs("includes")] string includes = null
         );
 
         [Get("/taxonomy/buyer/get")]
         Task<TaxonomyResponse> getBuyerTaxonomy();
-        
+
         /// <summary>
         /// 
         /// </summary>
         /// <param name="shopIds">Comma separated shop ids</param>
+        /// <param name="includes">Included associations.</param>
         /// <returns></returns>
         [Get("/shops/{shop_id}")]
         Task<ShopsResponse> getShops([AliasAs("shop_id")] string shopIds);

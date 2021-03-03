@@ -8,6 +8,7 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Web;
+using EtsyApi.Extensions;
 using EtsyApi.Middleware;
 using EtsyApi.Models;
 using EtsyApi.Responses;
@@ -16,6 +17,7 @@ using Refit;
 
 namespace EtsyApi
 {
+
     public class EtsyService
     {
         private readonly EtsyApiAuth _auth;
@@ -64,21 +66,36 @@ namespace EtsyApi
                 .findAllShopListingsActive(shopId, keyword, taxonomyId, limit, offset, page)
                 .ConfigureAwait(false);
         }
-        
+
         /// <summary>
         /// Gets listings by ID for the page.
         /// </summary>
         /// <param name="listingId"></param>
+        /// <param name="includes">Listing associations to include.</param>
         /// <returns></returns>
-        public async Task<ListingSearchResult> GetListingsByIdPage(int[] listingId)
+        public Task<ListingSearchResult> GetListingsByIdPage(int[] listingId, ListingAssociationIncludes includes = ListingAssociationIncludes.None)
+        {
+            var includesStr = includes.ToIncludeString();
+
+            return GetListingsByIdPage(listingId, includesStr);
+        }
+
+        /// <summary>
+        /// Gets listings by ID for the page.
+        /// </summary>
+        /// <param name="listingId"></param>
+        /// <param name="includesStr">Listing associations string to include.</param>
+        /// <returns></returns>
+        public async Task<ListingSearchResult> GetListingsByIdPage(int[] listingId, string includesStr)
         {
             var listingIdStr = string.Join(",", listingId);
-
+            
             return await _etsyApi
-                .getListing(listingIdStr)
+                .getListing(listingIdStr, includesStr)
                 .ConfigureAwait(false);
         }
-        
+
+
         public async Task<Shop[]> GetShops(string[] shopIds)
         {
             var listingIdStr = string.Join(",", shopIds);
@@ -90,6 +107,8 @@ namespace EtsyApi
             return r.results;
         }
         
+        
+
         /// <summary>
         /// Async enumerable for enumerating through paginated response.
         /// </summary>
@@ -174,25 +193,46 @@ namespace EtsyApi
         /// </summary>
         /// <param name="listingId"></param>
         /// <param name="token"></param>
+        /// <param name="includes">Associations to include.</param>
         /// <param name="progressReporter"></param>
         /// <returns></returns>
         public IAsyncEnumerable<Listing> GetListingsById(
-            int listingId, 
-            CancellationToken token = default(CancellationToken), 
-            IProgress<string> progressReporter = null) => GetListingsById(new[] {listingId}, token, progressReporter);
+            int listingId,
+            CancellationToken token = default(CancellationToken),
+            ListingAssociationIncludes includes = ListingAssociationIncludes.None,
+            IProgress<string> progressReporter = null) => GetListingsById(new[] { listingId }, token, includes, progressReporter);
+
+        /// <summary>
+        /// Gets all listings by Id
+        /// </summary>
+        /// <param name="listingId"></param>
+        /// <param name="token"></param>
+        /// <param name="includes">Associations to include.</param>
+        /// <param name="progressReporter"></param>
+        /// <returns></returns>
+        public IAsyncEnumerable<Listing> GetListingsById(
+            int[] listingId,
+            CancellationToken token = default(CancellationToken),
+            ListingAssociationIncludes includes = ListingAssociationIncludes.None, 
+            IProgress<string> progressReporter = null) => GetListingsByIdStringIncludes(listingId, token, includes.ToIncludeString(), progressReporter);
         
         /// <summary>
         /// Gets all listings by Id
         /// </summary>
         /// <param name="listingId"></param>
         /// <param name="token"></param>
+        /// <param name="includes">Listing associations to include.</param>
         /// <param name="progressReporter"></param>
         /// <returns></returns>
-        public IAsyncEnumerable<Listing> GetListingsById(int[] listingId, CancellationToken token = default(CancellationToken), IProgress<string> progressReporter = null)
+        public IAsyncEnumerable<Listing> GetListingsByIdStringIncludes(
+            int[] listingId, 
+            CancellationToken token = default(CancellationToken),
+            string includes = null,
+            IProgress<string> progressReporter = null)
         {
             var rr = GetAllInternal(async (page) =>
             {
-                var r = await GetListingsByIdPage(listingId);
+                var r = await GetListingsByIdPage(listingId, includes);
 
                 return r;
             }, token, progressReporter);

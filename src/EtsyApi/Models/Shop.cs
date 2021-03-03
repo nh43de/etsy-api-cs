@@ -241,5 +241,7 @@
         /// True if shop policies include a link to EU online dispute form 
         /// </summary>
         public bool include_dispute_form_link { get; set; }
+
+        
     }
 }

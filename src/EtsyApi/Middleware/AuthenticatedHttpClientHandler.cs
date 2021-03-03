@@ -78,7 +78,7 @@ namespace EtsyApi.Middleware
 
             var rr = await base.SendAsync(request, cancellationToken).ConfigureAwait(false);
 
-            //var debugStr = await rr.Content.ReadAsStringAsync();
+            var debugStr = await rr.Content.ReadAsStringAsync();
 
             return rr;
         }

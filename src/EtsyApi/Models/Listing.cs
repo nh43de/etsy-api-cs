@@ -4,6 +4,7 @@ using Newtonsoft.Json.Converters;
 
 namespace EtsyApi.Models
 {
+
     public class Listing
     {
         public int? category_id { get; set; }
@@ -49,6 +50,10 @@ namespace EtsyApi.Models
         public string url { get; set; }
         public int? user_id { get; set; }
         public int? views { get; set; }
+
+        public Shop Shop { get; set; }
+        public ShippingInfo ShippingInfo { get; set; }
+        public ListingImage Images { get; set; }
 
         public override string ToString()
         {
