@@ -107,8 +107,18 @@ namespace EtsyApi
 
             return r.results;
         }
-        
-        
+
+        /// <summary>
+        /// E.g. "outdoor-and-garden"
+        /// </summary>
+        /// <param name="userId">User Id (found at the end of your profile URL)</param>
+        /// <returns></returns>
+        public async Task<ShippingTemplate[]> GetUserShippingProfiles(string userId)
+        {
+            var d = await _etsyApi.findAllUserShippingProfiles(userId);
+
+            return d.results;
+        }
 
         /// <summary>
         /// Async enumerable for enumerating through paginated response.
@@ -270,6 +280,8 @@ namespace EtsyApi
         /// <returns></returns>
         public (string token, string tokenSecret, string loginUrl) Login()
         {
+            var scopeEncoded = HttpUtility.UrlEncode("email_r listings_r listings_w transactions_r profile_r");
+
             // Configure our OAuth client
             var client = new OAuthRequest
             {
@@ -278,14 +290,20 @@ namespace EtsyApi
                 SignatureMethod = OAuthSignatureMethod.HmacSha1,
                 ConsumerKey = _auth.ConsumerKey,
                 ConsumerSecret = _auth.ConsumerSecret,
-                RequestUrl = TokenRequestUrl,
+                RequestUrl = TokenRequestUrl + $"?scope={scopeEncoded}"
                 //CallbackUrl = "https://localhost:5001/api/etsy/callback"
             };
+            
+            //var scopeEncoded = HttpUtility.UrlEncode("email_r,listings_r,listings_w,transactions_r,billing_r,profile_r");
+
 
             // Build request url and send the request
-            var url = client.RequestUrl + "?" + client.GetAuthorizationQuery();
+            //var url = client.RequestUrl + client.GetAuthorizationQuery();
+            var url = client.RequestUrl + "&" + client.GetAuthorizationQuery();
             var request = (HttpWebRequest)WebRequest.Create(url);
             var response = (HttpWebResponse)request.GetResponse();
+            
+
 
             using var dataStream = response.GetResponseStream();
             var reader = new StreamReader(dataStream);
@@ -297,6 +315,12 @@ namespace EtsyApi
             var token = HttpUtility.ParseQueryString(responseFromServer).Get("oauth_token");
 
             return (token, tokenSecret, loginUrl);
+        }
+
+        public async Task<string[]> GetUserAccessScopes()
+        {
+            var r = await _etsyApi.getScopes();
+            return r.results;
         }
 
         private const string RequestAccessTokenUrl = "https://openapi.etsy.com/v2/oauth/access_token";

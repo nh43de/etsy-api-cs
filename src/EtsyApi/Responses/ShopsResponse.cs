@@ -8,4 +8,6 @@ namespace EtsyApi.Responses
 
         public Shop[] results { get; set; }
     }
+
+
 }

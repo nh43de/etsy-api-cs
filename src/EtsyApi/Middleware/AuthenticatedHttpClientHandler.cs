@@ -18,8 +18,11 @@ namespace EtsyApi.Middleware
 
         protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
         {
+
+
             if (_auth.OAuthToken != null)
             {
+
                 var client = new OAuthRequest
                 {
                     Method = "GET",
@@ -48,7 +51,6 @@ namespace EtsyApi.Middleware
                 //{
                 //    var authQuery = client.GetAuthorizationQuery();
 
-                //    var q = QueryHelpers.ParseQuery(authQuery);
 
                 //    var r = QueryHelpers.AddQueryString(request.RequestUri.AbsoluteUri, q.ToDictionary(p => p.Key, p => p.Value.ToString()));
 
@@ -65,7 +67,7 @@ namespace EtsyApi.Middleware
                 }
             }
 
-            if (_auth.ConsumerKey != null)
+            if (_auth.ConsumerKey != null && request.RequestUri.AbsolutePath.Contains("/oauth/scopes") == false && request.RequestUri.AbsolutePath.Contains("shipping/templates") == false)
             {
                 //unauthenticated, non user specific
                 {
@@ -74,7 +76,6 @@ namespace EtsyApi.Middleware
                     request.RequestUri = new Uri(r);
                 }
             }
-
 
             var rr = await base.SendAsync(request, cancellationToken).ConfigureAwait(false);
 

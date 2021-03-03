@@ -14,15 +14,17 @@ namespace EtsyApi.Tests
     public class EtsyShould
     {
         private readonly string _searchExample = "knitted scarf";
-        private readonly string _shopExample = "myshop";
+        private readonly string _shopExample = "AuroraGraceDesign";
         private readonly int _listingExample = 184814873;
         private readonly int _taxonomyIdExample = 123123123;
-        
+        private readonly string _testUserShippingProfiles = "__SELF__";
+
         //[Theory, Conventions]
         //public void Login(EtsyService etsyService)
         //{
         //    var r = etsyService.Login();
         //}
+
         
         //[Theory, Conventions]
         //public void GetOauthTokens(EtsyService etsyService)
@@ -35,8 +37,7 @@ namespace EtsyApi.Tests
         {
             var r = await etsyService.GetListingsById(new[] { _listingExample }).ToArrayAsync();
         }
-
-
+        
         [Theory, Conventions]
         public async Task GetListingWithIncludes(EtsyService etsyService)
         {
@@ -46,7 +47,7 @@ namespace EtsyApi.Tests
         [Theory, Conventions]
         public async Task GetListingWithIncludesString(EtsyService etsyService)
         {
-            var r = await etsyService.GetListingsByIdStringIncludes(new[] { _listingExample }, CancellationToken.None, "Images(url_75x75,url_170x135),Shop(shop_id)").ToArrayAsync();
+            var r = await etsyService.GetListingsByIdStringIncludes(new[] { _listingExample }, CancellationToken.None, "Images(url_75x75,url_170x135):1:0,Shop(shop_id)").ToArrayAsync();
         }
 
         [Theory, Conventions]
@@ -54,7 +55,21 @@ namespace EtsyApi.Tests
         {
             var r = await etsyService.GetBuyerTaxonomiesFlattened();
         }
-        
+
+        [Theory, Conventions]
+        public async Task GetUserShippingProfiles(EtsyService etsyService)
+        {
+            var r = await etsyService.GetUserShippingProfiles(_testUserShippingProfiles);
+        }
+
+
+        [Theory, Conventions]
+        public async Task GetUserAccessScopes(EtsyService etsyService)
+        {
+            var r = await etsyService.GetUserAccessScopes();
+        }
+
+
         [Theory, Conventions]
         public async Task FindTaxonomy(EtsyService etsyService)
         {

@@ -60,5 +60,26 @@ bool
         /// <returns></returns>
         [Get("/shops/{shop_id}")]
         Task<ShopsResponse> getShops([AliasAs("shop_id")] string shopIds);
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        [Get("/users/{user_id}/shipping/templates")]
+        Task<GenericResponse<ShippingTemplate>> findAllUserShippingProfiles([AliasAs("user_id")] string userId);
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        [Get("/oauth/request_token")]
+        Task<GenericResponse<ShippingTemplate>> requestTemporaryCredentials([AliasAs("scope")] string scopes);
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        [Get("/oauth/scopes")]
+        Task<GenericResponse<string>> getScopes();
     }
 }
