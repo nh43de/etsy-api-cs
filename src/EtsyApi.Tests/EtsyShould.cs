@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using DataPowerTools.Extensions;
+using EtsyApi.Models.Associations;
 using FluentAssertions;
 using Xunit;
 

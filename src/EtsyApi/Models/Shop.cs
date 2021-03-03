@@ -1,4 +1,4 @@
-﻿namespace EtsyApi
+﻿namespace EtsyApi.Models
 {
     public class Shop
     {

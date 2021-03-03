@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace EtsyApi
+namespace EtsyApi.Models.Associations
 {
     [Flags]
     public enum ListingAssociationIncludes

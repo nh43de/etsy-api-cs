@@ -1,4 +1,6 @@
-﻿namespace EtsyApi.Responses
+﻿using EtsyApi.Models;
+
+namespace EtsyApi.Responses
 {
     public class ShopsResponse
     {

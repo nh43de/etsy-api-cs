@@ -52,8 +52,8 @@ namespace EtsyApi.Models
         public int? views { get; set; }
 
         public Shop Shop { get; set; }
-        public ShippingInfo ShippingInfo { get; set; }
-        public ListingImage Images { get; set; }
+        public ShippingInfo[] ShippingInfo { get; set; }
+        public ListingImage[] Images { get; set; }
 
         public override string ToString()
         {

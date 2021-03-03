@@ -11,6 +11,7 @@ using System.Web;
 using EtsyApi.Extensions;
 using EtsyApi.Middleware;
 using EtsyApi.Models;
+using EtsyApi.Models.Associations;
 using EtsyApi.Responses;
 using OAuth;
 using Refit;
