@@ -16,7 +16,7 @@ namespace EtsyApi.Tests
     {
         private readonly string _searchExample = "aquarium pedestal";
         private readonly string _shopExample = "AuroraGraceDesign";
-        private readonly int _listingExample = 184814873;
+        private readonly int _listingExample = 863646365;
         private readonly int _taxonomyIdExample = 6871;
         private readonly string _testUserShippingProfiles = "__SELF__";
 
@@ -81,6 +81,12 @@ namespace EtsyApi.Tests
         }
 
         [Theory, Conventions]
+        public async Task GetListingWithVariations(EtsyService etsyService)
+        {
+            var r = await etsyService.GetListingsById(new[] { _listingExample }, CancellationToken.None, ListingAssociationIncludes.Variations).ToArrayAsync();
+        }
+
+        [Theory, Conventions]
         public async Task GetAllTaxonomies(EtsyService etsyService)
         {
             var r = await etsyService.GetBuyerTaxonomiesFlattened();
@@ -90,6 +96,9 @@ namespace EtsyApi.Tests
         public async Task GetUserShippingProfiles(EtsyService etsyService)
         {
             var r = await etsyService.GetUserShippingProfiles(_testUserShippingProfiles);
+
+            //r.WriteCsv("shippingTemplates.csv");
+
         }
 
 

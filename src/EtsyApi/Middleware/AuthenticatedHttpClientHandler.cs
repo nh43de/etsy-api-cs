@@ -175,9 +175,14 @@ namespace EtsyApi.Middleware
 
             try
             {
-                var debugStr = await rr?.Content?.ReadAsStringAsync();
+                var debugResponseStr = await rr?.Content?.ReadAsStringAsync();
 
-                var requestDebugStr = await request?.Content?.ReadAsStringAsync();
+                var task = request?.Content?.ReadAsStringAsync();
+
+                if (task != null)
+                {
+                    var requestDebugStr = await task;
+                }
             }
             catch (Exception e)
             {

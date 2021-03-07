@@ -5,6 +5,23 @@ using Newtonsoft.Json.Converters;
 namespace EtsyApi.Models
 {
 
+    public class ListingVariations
+    {
+        public int property_id { get; set; }
+        public string formatted_name { get; set; }
+        public ListingVariationOption[] options { get; set; }
+    }
+
+    public class ListingVariationOption
+    {
+        public long value_id { get; set; }
+        public string value { get; set; }
+        public string formatted_value { get; set; }
+        public bool is_available { get; set; }
+        public float price_diff { get; set; }
+        public float price { get; set; }
+    }
+
     public class Listing
     {
         public int? category_id { get; set; }
@@ -62,6 +79,7 @@ namespace EtsyApi.Models
         public ListingRecipient? recipient { get; set; }
         public ListingOcassion? occasion { get; set; }
 
+        public ListingVariations[] Variations { get; set; }
 
         public override string ToString()
         {
