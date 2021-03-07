@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using DataPowerTools.Extensions;
+using EtsyApi.Models;
 using EtsyApi.Models.Associations;
 using FluentAssertions;
 using Xunit;
@@ -13,10 +14,10 @@ namespace EtsyApi.Tests
     // set credentials in Conventions.cs
     public class EtsyShould
     {
-        private readonly string _searchExample = "knitted scarf";
+        private readonly string _searchExample = "aquarium pedestal";
         private readonly string _shopExample = "AuroraGraceDesign";
         private readonly int _listingExample = 184814873;
-        private readonly int _taxonomyIdExample = 123123123;
+        private readonly int _taxonomyIdExample = 6871;
         private readonly string _testUserShippingProfiles = "__SELF__";
 
         //[Theory, Conventions]
@@ -25,12 +26,41 @@ namespace EtsyApi.Tests
         //    var r = etsyService.Login();
         //}
 
-        
+
         //[Theory, Conventions]
         //public void GetOauthTokens(EtsyService etsyService)
         //{
         //    var r = etsyService.GetOauthTokens();
         //}
+
+        [Theory, Conventions]
+        public async Task CreateListing(EtsyService etsyService)
+        {
+            //var templates = await etsyService.GetUserShippingProfiles(_testUserShippingProfiles);
+
+            //var template = templates.FirstOrDefault();
+            
+
+            await etsyService.CreateListing(new CreateListing()
+            {
+                quantity = 1,
+                title = "Test Item",
+                description = "This is a \"test\" item",
+                price = 20.99f,
+                shipping_template_id = 131535583384,//template.shipping_template_id,
+                taxonomy_id = _taxonomyIdExample,
+                //shop_section_id = shopSectionId,
+                non_taxable = false, 
+                is_supply = false,
+                state = CreateListingState.draft,
+                tags = new StringCollection(new [] { "test item", "test tag2" }),
+                who_made = ListingWhoMade.i_did,
+                when_made = ListingWhenMade._2020_2021,
+                recipient = ListingRecipient.not_specified,
+                processing_max = 2,
+                processing_min = 1
+            });
+        }
 
         [Theory, Conventions]
         public async Task GetListing(EtsyService etsyService)

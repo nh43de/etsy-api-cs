@@ -1,5 +1,5 @@
 ﻿using System;
-using Newtonsoft.Json;
+using System.Text.Json.Serialization;
 using Newtonsoft.Json.Converters;
 
 namespace EtsyApi.Models
@@ -32,7 +32,7 @@ namespace EtsyApi.Models
         [JsonConverter(typeof(UnixDateTimeConverter))]
         public DateTime? original_creation_tsz { get; set; }
 
-        public float? price { get; set; }
+        public double? price { get; set; }
         public int? quantity { get; set; }
         public long? shipping_template_id { get; set; }
         public int? shop_section_id { get; set; }
@@ -54,6 +54,14 @@ namespace EtsyApi.Models
         public Shop Shop { get; set; }
         public ShippingInfo[] ShippingInfo { get; set; }
         public ListingImage[] Images { get; set; }
+
+        public ListingWhoMade? who_made { get; set; }
+
+        public ListingWhenMade? when_made { get; set; }
+
+        public ListingRecipient? recipient { get; set; }
+        public ListingOcassion? occasion { get; set; }
+
 
         public override string ToString()
         {

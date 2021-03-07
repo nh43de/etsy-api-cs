@@ -1,0 +1,39 @@
+﻿namespace EtsyApi.Models
+{
+    public enum ListingOcassion
+    {
+        anniversary,
+        baptism,
+        bar_or_bat_mitzvah,
+        birthday,
+        canada_day,
+        chinese_new_year,
+        cinco_de_mayo,
+        confirmation,
+        christmas,
+        day_of_the_dead,
+        easter,
+        eid,
+        engagement,
+        fathers_day,
+        get_well,
+        graduation,
+        halloween,
+        hanukkah,
+        housewarming,
+        kwanzaa,
+        prom,
+        july_4th,
+        mothers_day,
+        new_baby,
+        new_years,
+        quinceanera,
+        retirement,
+        st_patricks_day,
+        sweet_16,
+        sympathy,
+        thanksgiving,
+        valentines,
+        wedding
+    }
+}

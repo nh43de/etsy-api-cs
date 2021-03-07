@@ -6,6 +6,8 @@ using System.Threading.Tasks;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 using System.Threading;
 using System.Web;
 using EtsyApi.Extensions;
@@ -13,6 +15,8 @@ using EtsyApi.Middleware;
 using EtsyApi.Models;
 using EtsyApi.Models.Associations;
 using EtsyApi.Responses;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 using OAuth;
 using Refit;
 
@@ -29,9 +33,34 @@ namespace EtsyApi
 
         public EtsyService(EtsyApiAuth auth)
         {
+
+            //var options = new JsonSerializerOptions()
+            //{
+            //    NumberHandling = JsonNumberHandling.AllowReadingFromString
+            //};
+
+            //options.Converters.Add(new JsonStringEnumConverter());
+            //options.Converters.Add(new SystemObjectNewtonsoftCompatibleConverter());
+
+            //_auth = auth;
+            //var httpClient = new HttpClient(new HttpClientDiagnosticsHandler(new AuthenticatedHttpClientHandler(auth))) { BaseAddress = _baseUri };
+            //_etsyApi = RestService.For<IEtsyApi>(httpClient, new RefitSettings()
+            //{
+            //    ContentSerializer = new SystemTextJsonContentSerializer(options)
+            //});
+            //
+
+            var options = new JsonSerializerSettings()
+            {
+            };
+            options.Converters.Add(new UnixDateTimeConverter());
+
             _auth = auth;
             var httpClient = new HttpClient(new HttpClientDiagnosticsHandler(new AuthenticatedHttpClientHandler(auth))) { BaseAddress = _baseUri };
-            _etsyApi = RestService.For<IEtsyApi>(httpClient);
+            _etsyApi = RestService.For<IEtsyApi>(httpClient, new RefitSettings()
+            {
+                ContentSerializer = new NewtonsoftJsonContentSerializer(options)
+            });
         }
 
         /// <summary>
@@ -251,6 +280,55 @@ namespace EtsyApi
             return rr;
         }
 
+
+        public async Task CreateListing(CreateListing createListing)
+        {
+            await _etsyApi.createListing(createListing);
+        }
+
+        //public async Task CreateListing(int quantity,
+        //    string title,
+        //    string description,
+        //    float price,
+        //    string[] materials,
+        //    long shipping_template_id,
+        //    int taxonomy_id,
+        //    int shop_section_id,
+        //    bool is_customizable,
+        //    bool non_taxable,
+        //    CreateListingState state,
+        //    int processing_min,
+        //    int processing_max,
+        //    string[] tags,
+        //    ListingWhoMade who_made,
+        //    bool is_supply,
+        //    ListingWhenMade when_made,
+        //    ListingRecipient? recipient,
+        //    ListingOcassion? occasion,
+        //    string[] style)
+        //{
+        //    await _etsyApi.createListing(quantity,
+        //        title,
+        //        description,
+        //        price,
+        //        materials,
+        //        shipping_template_id,
+        //        taxonomy_id,
+        //        shop_section_id,
+        //        is_customizable,
+        //        non_taxable,
+        //        state,
+        //        processing_min,
+        //        processing_max,
+        //        tags,
+        //        who_made,
+        //        is_supply,
+        //        when_made,
+        //        recipient,
+        //        occasion,
+        //        style);
+        //}
+
         //public async Task OpenOrders()
         //{
         //    const string requestUrl = "https://openapi.etsy.com/v2/shops/YOURSHOPNAME/receipts/open?";
@@ -437,5 +515,6 @@ namespace EtsyApi
         }
     }
 
+    
 
 }
