@@ -35,7 +35,7 @@ namespace EtsyApi
         /// <summary>
         /// $5
         /// </summary>
-        public long shipping_template_id { get; set; }
+        public long? shipping_template_id { get; set; }
 
         /// <summary>
         /// $5
@@ -45,7 +45,7 @@ namespace EtsyApi
         /// <summary>
         /// $5
         /// </summary>
-        public int shop_section_id { get; set; }
+        public int? shop_section_id { get; set; }
 
         ///// <summary>
         ///// $5
@@ -75,12 +75,12 @@ namespace EtsyApi
         /// <summary>
         /// $5
         /// </summary>
-        public int processing_min { get; set; }
+        public int? processing_min { get; set; }
 
         /// <summary>
         /// $5
         /// </summary>
-        public int processing_max { get; set; }
+        public int? processing_max { get; set; }
 
         /// <summary>
         /// $5
