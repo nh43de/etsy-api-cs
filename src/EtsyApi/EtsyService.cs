@@ -22,7 +22,6 @@ using Refit;
 
 namespace EtsyApi
 {
-
     public class EtsyService
     {
         private readonly EtsyApiAuth _auth;
@@ -68,32 +67,38 @@ namespace EtsyApi
         /// </summary>
         /// <param name="keyword"></param>
         /// <param name="taxonomyId"></param>
-        /// <param name="limit">Max is 100</param>
-        /// <param name="offset"></param>
-        /// <param name="page">Starts at 1</param>
         /// <returns></returns>
-        public async Task<ListingSearchResult> GetListingsPage(string keyword, int? taxonomyId = null, int? limit = 25,int? offset = 0,int? page = 1)
+        public async Task<ListingSearchResult> GetListingsPage(string keyword, int? taxonomyId = null, GetListingsPageParameters pageParams = null)
         {
             return await _etsyApi
-                .findAllListingActive(keyword, taxonomyId, limit,offset,page)
+                .findAllListingActive(keyword, taxonomyId,
+                    pageParams?.Limit ?? 100,
+                    pageParams?.Offset ?? 0,
+                    pageParams?.Page ?? 1,
+                    pageParams?.Includes ?? null)
                 .ConfigureAwait(false);
         }
-
-
+        
         /// <summary>
         /// 
         /// </summary>
         /// <param name="shopId"></param>
         /// <param name="keyword"></param>
         /// <param name="taxonomyId"></param>
-        /// <param name="limit">Max is 100</param>
-        /// <param name="offset"></param>
-        /// <param name="page">Starts at 1</param>
+        /// <param name="pageParams"></param>
         /// <returns></returns>
-        public async Task<ListingSearchResult> GetShopListingsPage(string shopId, string keyword = null, int? taxonomyId = null, int? limit = 25, int? offset = 0, int? page = 1)
+        public async Task<ListingSearchResult> GetShopListingsPage(
+            string shopId,
+            string keyword = null,
+            int? taxonomyId = null,
+            GetListingsPageParameters pageParams = null)
         {
             return await _etsyApi
-                .findAllShopListingsActive(shopId, keyword, taxonomyId, limit, offset, page)
+                .findAllShopListingsActive(shopId, keyword, taxonomyId,
+                    pageParams?.Limit ?? 100,
+                    pageParams?.Offset ?? 0,
+                    pageParams?.Page ?? 1,
+                    pageParams?.Includes ?? null)
                 .ConfigureAwait(false);
         }
 
@@ -156,7 +161,10 @@ namespace EtsyApi
         /// <param name="token"></param>
         /// <param name="progressReporter"></param>
         /// <returns></returns>
-        private async IAsyncEnumerable<Listing> GetAllInternal(Func<int, Task<ListingSearchResult>> searchFunc, [EnumeratorCancellation] CancellationToken token = default(CancellationToken), IProgress<string> progressReporter = null)
+        private async IAsyncEnumerable<Listing> GetAllInternal(
+            Func<int, Task<ListingSearchResult>> searchFunc, 
+            [EnumeratorCancellation] CancellationToken token = default(CancellationToken),
+            IProgress<string> progressReporter = null)
         {
             var page = 1;
             var hasMorePages = true;
@@ -193,14 +201,27 @@ namespace EtsyApi
         /// <param name="shopId"></param>
         /// <param name="keyword"></param>
         /// <param name="taxonomyId"></param>
+        /// <param name="getListingsParameters"></param>
         /// <param name="token"></param>
         /// <param name="progressReporter"></param>
         /// <returns></returns>
-        public IAsyncEnumerable<Listing> GetAllShopListings(string shopId, string keyword = null, int? taxonomyId = null, CancellationToken token = default(CancellationToken), IProgress<string> progressReporter = null)
+        public IAsyncEnumerable<Listing> GetAllShopListings(
+            string shopId,
+            string keyword = null,
+            int? taxonomyId = null,
+            GetListingsParameters getListingsParameters = null,
+            CancellationToken token = default(CancellationToken),
+            IProgress<string> progressReporter = null)
         {
             var rr = GetAllInternal(async (page) =>
             {
-                var r = await GetShopListingsPage(shopId, keyword, taxonomyId, 100, 0, page);
+                var r = await GetShopListingsPage(shopId, keyword, taxonomyId, new GetListingsPageParameters
+                {
+                    Limit = 100,
+                    Offset = 0,
+                    Includes = getListingsParameters?.Includes,
+                    Page = page
+                });
 
                 return r;
             }, token, progressReporter);
@@ -213,14 +234,26 @@ namespace EtsyApi
         /// </summary>
         /// <param name="keyword"></param>
         /// <param name="taxonomyId"></param>
+        /// <param name="getListingsParameters"></param>
         /// <param name="token"></param>
         /// <param name="progressReporter"></param>
         /// <returns></returns>
-        public IAsyncEnumerable<Listing> GetAllListings(string keyword, int? taxonomyId = null, CancellationToken token = default(CancellationToken), IProgress<string> progressReporter = null)
+        public IAsyncEnumerable<Listing> GetAllListings(
+            string keyword,
+            int? taxonomyId = null,
+            GetListingsParameters getListingsParameters = null,
+            CancellationToken token = default(CancellationToken),
+            IProgress<string> progressReporter = null)
         {
             var rr = GetAllInternal(async (page) =>
             {
-                var r = await GetListingsPage(keyword, taxonomyId, 100, 0, page);
+                var r = await GetListingsPage(keyword, taxonomyId, new GetListingsPageParameters
+                {
+                    Limit = 100,
+                    Offset = 0,
+                    Includes = getListingsParameters?.Includes,
+                    Page = page
+                }); //100, 0, page, includes);
 
                 return r;
             }, token, progressReporter);
@@ -279,8 +312,7 @@ namespace EtsyApi
 
             return rr;
         }
-
-
+        
         public async Task CreateListing(CreateListing createListing)
         {
             await _etsyApi.createListing(createListing);

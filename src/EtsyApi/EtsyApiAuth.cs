@@ -27,7 +27,6 @@
         /// Token verifier. Obtained via callback/textbox on etsy site after authorizing the login.
         /// </summary>
         public string VerifierSecret { get; set; }
-
         
         /// <summary>
         /// Etsy account-specific OAuth token that grants access to private info and side-effecting operations.

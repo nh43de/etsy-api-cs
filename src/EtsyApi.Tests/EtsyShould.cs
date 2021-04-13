@@ -16,7 +16,7 @@ namespace EtsyApi.Tests
     {
         private readonly string _searchExample = "aquarium pedestal";
         private readonly string _shopExample = "AuroraGraceDesign";
-        private readonly int _listingExample = 863646365;
+        private readonly int _listingExample = 962382648;
         private readonly int _taxonomyIdExample = 6871;
         private readonly string _testUserShippingProfiles = "__SELF__";
 
@@ -32,28 +32,35 @@ namespace EtsyApi.Tests
         //{
         //    var r = etsyService.GetOauthTokens();
         //}
-
-        [Theory, Conventions]
+        
+        //[Theory, Conventions]
         public async Task CreateListing(EtsyService etsyService)
         {
             //var templates = await etsyService.GetUserShippingProfiles(_testUserShippingProfiles);
 
             //var template = templates.FirstOrDefault();
-            
 
-            await etsyService.CreateListing(new CreateListing()
+            var description =
+                    @"Test description"
+                ;
+            
+            var title = "Test title";
+
+            var price = 88.99f;
+
+            await etsyService.CreateListing(new CreateListing
             {
                 quantity = 1,
-                title = "Test Item",
-                description = "This is a \"test\" item",
-                price = 20.99f,
-                shipping_template_id = 131535583384,//template.shipping_template_id,
-                taxonomy_id = _taxonomyIdExample,
-                //shop_section_id = shopSectionId,
-                non_taxable = false, 
+                title = title,
+                description = description,
+                price = price,
+                shipping_template_id = 131526383384,
+                taxonomy_id = 6561,
+                shop_section_id = 32402445,
+                non_taxable = false,
                 is_supply = false,
                 state = CreateListingState.draft,
-                tags = new StringCollection(new [] { "test item", "test tag2" }),
+                tags = new StringCollection(new[] { "testtag", "tag" }),
                 who_made = ListingWhoMade.i_did,
                 when_made = ListingWhenMade._2020_2021,
                 recipient = ListingRecipient.not_specified,
@@ -90,6 +97,8 @@ namespace EtsyApi.Tests
         public async Task GetAllTaxonomies(EtsyService etsyService)
         {
             var r = await etsyService.GetBuyerTaxonomiesFlattened();
+            
+            r.WriteCsv("EtsyTaxonomies.csv");
         }
 
         [Theory, Conventions]
@@ -97,7 +106,7 @@ namespace EtsyApi.Tests
         {
             var r = await etsyService.GetUserShippingProfiles(_testUserShippingProfiles);
 
-            //r.WriteCsv("shippingTemplates.csv");
+            r.WriteCsv("shippingTemplates.csv");
 
         }
 
@@ -121,13 +130,14 @@ namespace EtsyApi.Tests
             var r = await etsyService.FindTaxonomyById(_taxonomyIdExample);
         }
 
-        //[Theory, Conventions]
-        //public async Task GetTaxonomy(EtsyService etsyService)
-        //{
-        //    var r = await etsyService.GetBuyerTaxonomies();
-        //}
+        [Theory, Conventions]
+        public async Task GetTaxonomy(EtsyService etsyService)
+        {
+            var r = await etsyService.GetBuyerTaxonomies();
+            
+        }
 
-        
+
         [Theory, Conventions]
         public async Task GetShops(EtsyService etsyService)
         {
@@ -137,7 +147,12 @@ namespace EtsyApi.Tests
         [Theory, Conventions]
         public async Task SearchSinglePage(EtsyService etsyService)
         {
-            var r = await etsyService.GetListingsPage(_searchExample, null, 100, 0, 1);
+            var r = await etsyService.GetListingsPage(_searchExample, null, new GetListingsPageParameters
+            {
+                Limit = 100,
+                Offset = 0,
+                Page = 1
+            });
         }
 
         [Theory, Conventions]
@@ -147,9 +162,30 @@ namespace EtsyApi.Tests
         }
 
         [Theory, Conventions]
+        public async Task SearchAllWithIncludes(EtsyService etsyService)
+        {
+            var r = await etsyService.GetAllListings(_searchExample, 891, new GetListingsPageParameters()
+            {
+                Includes = "Images(url_75x75,url_170x135):1:0,Shop(shop_id)"
+            }).ToArrayAsync();
+        }
+
+        [Theory, Conventions]
         public async Task GetAllShopListings(EtsyService etsyService)
         {
             var r = await etsyService.GetAllShopListings(_shopExample).ToArrayAsync();
+        }
+
+        [Theory, Conventions]
+        public async Task GetAllShopListingsWithIncludes(EtsyService etsyService)
+        {
+            var r = await etsyService.GetAllShopListings(_shopExample, null, null,new GetListingsPageParameters
+            {
+                Limit = 100,
+                Offset = 0,
+                Page = 1,
+                Includes = "Images(url_75x75,url_170x135):1:0,Shop(shop_id)"
+            }).ToArrayAsync();
         }
 
         //[Theory, Conventions]

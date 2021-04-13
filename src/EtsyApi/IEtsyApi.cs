@@ -70,7 +70,8 @@ $1[]
             [AliasAs("taxonomy_id")] int? taxonomyId = null,
             [AliasAs("limit")] int? limit = 25, 
             [AliasAs("offset")] int? offset = 0, 
-            [AliasAs("page")] int? page = 0
+            [AliasAs("page")] int? page = 0,
+            [AliasAs("includes")] string includes = null
         );
 
         [Get("/shops/{shop_id}/listings/active")]
@@ -80,17 +81,20 @@ $1[]
             [AliasAs("taxonomy_id")] int? taxonomyId = null,
             [AliasAs("limit")] int? limit = 25,
             [AliasAs("offset")] int? offset = 0,
-            [AliasAs("page")] int? page = 0
+            [AliasAs("page")] int? page = 0, 
+            [AliasAs("includes")] string includes = null
         );
 
         /// <summary>
         /// 
         /// </summary>
         /// <param name="listingIds">Comma separated listing ids</param>
+        /// <param name="includes"></param>
         /// <returns></returns>
         [Get("/listings/{listing_id}")]
         Task<ListingSearchResult> getListing(
-           [AliasAs("listing_id")] string listingIds, [AliasAs("includes")] string includes = null
+           [AliasAs("listing_id")] string listingIds,
+           [AliasAs("includes")] string includes = null
         );
 
         [Get("/taxonomy/buyer/get")]
