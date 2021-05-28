@@ -5,23 +5,6 @@ using Newtonsoft.Json.Converters;
 namespace EtsyApi.Models
 {
 
-    public class ListingVariations
-    {
-        public int property_id { get; set; }
-        public string formatted_name { get; set; }
-        public ListingVariationOption[] options { get; set; }
-    }
-
-    public class ListingVariationOption
-    {
-        public long value_id { get; set; }
-        public string value { get; set; }
-        public string formatted_value { get; set; }
-        public bool is_available { get; set; }
-        public float price_diff { get; set; }
-        public float price { get; set; }
-    }
-
     public class Listing
     {
         public int? category_id { get; set; }
@@ -54,7 +37,7 @@ namespace EtsyApi.Models
         public long? shipping_template_id { get; set; }
         public int? shop_section_id { get; set; }
         public string[] sku { get; set; }
-        public ListingState state { get; set; }
+        public ListingState? state { get; set; }
 
         [JsonConverter(typeof(UnixDateTimeConverter))]
         public DateTime? state_tsz { get; set; }
@@ -71,6 +54,11 @@ namespace EtsyApi.Models
         public Shop Shop { get; set; }
         public ShippingInfo[] ShippingInfo { get; set; }
         public ListingImage[] Images { get; set; }
+
+        /// <summary>
+        /// Inventory data for this Listing. Note: This can only be used with the getListing, createListing, and updateListing methods.
+        /// </summary>
+        public ListingInventory Inventory { get; set; }
 
         public ListingWhoMade? who_made { get; set; }
 
