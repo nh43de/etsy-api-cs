@@ -33,7 +33,7 @@ namespace EtsyApi.Tests
         //    var r = etsyService.GetOauthTokens();
         //}
         
-        //[Theory, Conventions]
+        [Theory, Conventions]
         public async Task CreateListing(EtsyService etsyService)
         {
             //var templates = await etsyService.GetUserShippingProfiles(_testUserShippingProfiles);
@@ -54,9 +54,9 @@ namespace EtsyApi.Tests
                 title = title,
                 description = description,
                 price = price,
-                shipping_template_id = 131526383384,
+                shipping_template_id = 131535626742,
                 taxonomy_id = 6561,
-                shop_section_id = 32402445,
+                //shop_section_id = 32402445,
                 non_taxable = false,
                 is_supply = false,
                 state = CreateListingState.draft,
@@ -65,7 +65,16 @@ namespace EtsyApi.Tests
                 when_made = ListingWhenMade._2020_2021,
                 recipient = ListingRecipient.not_specified,
                 processing_max = 2,
-                processing_min = 1
+                processing_min = 1,
+                Inventory = new ListingInventory {
+                    products = new ListingProduct[]
+                    {
+                        new ListingProduct()
+                        {
+                            sku = "TEST-SKU-123"
+                        }
+                    }
+                }
             });
         }
 
@@ -166,8 +175,12 @@ namespace EtsyApi.Tests
         {
             var r = await etsyService.GetAllListings(_searchExample, 891, new GetListingsPageParameters()
             {
-                Includes = "Images(url_75x75,url_170x135):1:0,Shop(shop_id)"
+                Includes = "Images(url_75x75,url_170x135):1:0,Shop(shop_id),ShippingInfo"
             }).ToArrayAsync();
+
+            //var item = r.FirstOrDefault(p => p.listing_id == 974223362);
+
+            //var usaTemplate = item.ShippingInfo.Where(p => p.destination_country_id == 209 || p.destination_country_id == null).ToArray();
         }
 
         [Theory, Conventions]

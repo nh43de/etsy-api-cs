@@ -116,5 +116,10 @@ namespace EtsyApi
         /// $5
         /// </summary>
         public StringCollection style { get; set; }
+
+        /// <summary>
+        /// Inventory data for this Listing. Note: This can only be used with the getListing, createListing, and updateListing methods.
+        /// </summary>
+        public ListingInventory Inventory { get; set; }
     }
 }
