@@ -53,6 +53,7 @@ namespace EtsyApi
             {
             };
             options.Converters.Add(new UnixDateTimeConverter());
+            options.Converters.Add(new EscapeHtmlEncodedStringConverter());
 
             _auth = auth;
             var httpClient = new HttpClient(new HttpClientDiagnosticsHandler(new AuthenticatedHttpClientHandler(auth))) { BaseAddress = _baseUri };

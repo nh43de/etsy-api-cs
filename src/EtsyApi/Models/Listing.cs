@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Text.Json.Serialization;
+using EtsyApi.Extensions;
 using Newtonsoft.Json.Converters;
 
 namespace EtsyApi.Models
@@ -46,7 +47,10 @@ namespace EtsyApi.Models
         public string[] tags { get; set; }
         public int? taxonomy_id { get; set; }
         public string[] taxonomy_path { get; set; }
+
+        [JsonConverter(typeof(EscapeHtmlEncodedStringConverter))]
         public string title { get; set; }
+
         public string url { get; set; }
         public int? user_id { get; set; }
         public int? views { get; set; }
