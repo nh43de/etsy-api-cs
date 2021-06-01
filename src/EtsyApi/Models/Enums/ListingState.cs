@@ -12,6 +12,7 @@
         create,
         @private,
         unavailable,
-        vacation
+        vacation,
+        a_closed
     }
 }
