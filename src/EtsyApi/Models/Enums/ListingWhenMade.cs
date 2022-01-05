@@ -6,6 +6,8 @@ namespace EtsyApi.Models
     {
         [EnumMember(Value = "made_to_order")]
         _made_to_order,
+        [EnumMember(Value = "2020_2022")]
+        _2020_2022,
         [EnumMember(Value = "2020_2021")]
         _2020_2021,
         [EnumMember(Value = "2010_2019")]
