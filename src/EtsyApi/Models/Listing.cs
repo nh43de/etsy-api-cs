@@ -64,9 +64,9 @@ namespace EtsyApi.Models
         /// </summary>
         public ListingInventory Inventory { get; set; }
 
-        public ListingWhoMade? who_made { get; set; }
+        public string who_made { get; set; }
 
-        public ListingWhenMade? when_made { get; set; }
+        public string when_made { get; set; }
 
         public ListingRecipient? recipient { get; set; }
         public ListingOcassion? occasion { get; set; }
