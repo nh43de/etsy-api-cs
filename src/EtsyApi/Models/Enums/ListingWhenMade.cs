@@ -16,6 +16,8 @@ namespace EtsyApi.Models
         _2002_2009,
         [EnumMember(Value = "before_2002")]
         _before_2002,
+        [EnumMember(Value = "before_2003")]
+        _before_2003,
         [EnumMember(Value = "2000_2001")]
         _2000_2001,
         [EnumMember(Value = "1990s")]
