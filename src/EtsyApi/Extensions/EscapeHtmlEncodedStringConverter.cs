@@ -14,7 +14,7 @@ namespace EtsyApi.Extensions
 
         public override string ReadJson(JsonReader reader, Type objectType, string existingValue, bool hasExistingValue, JsonSerializer serializer)
         {
-            var s = (string)reader.Value;
+            var s = (string)reader.Value?.ToString();
 
             var r = HttpUtility.HtmlDecode(s);
 
